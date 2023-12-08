@@ -4,6 +4,7 @@ import com.workintect.library.Enum.Genre;
 import com.workintect.library.models.*;
 
 
+import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -118,6 +119,10 @@ public class Main {
                             User existingUser = library.findUserById(userId);
                             double userBalance;
                             if (existingUser != null) {
+                                if(!existingUser.getFullName().equals(userName)){
+                                    System.out.println("Provided id is already taken use different id number!!");
+                                    return;
+                                }
                                 user = existingUser;
                             } else {
                                 System.out.println("Please enter your balance: ");
@@ -135,6 +140,11 @@ public class Main {
                             System.out.println("Enter the ID of the book you want to borrow: ");
                             long bookIdToBorrow = scanner.nextLong();
                             scanner.nextLine();
+                            Book borrowedBook = library.findBookById(bookIdToBorrow);
+                            if (borrowedBook == null) {
+                                System.out.println("Book not found with the provided ID. Please enter a valid book ID.");
+                                return;
+                            }
                             ((User) user).borrowBook(library, bookIdToBorrow);
 
                             System.out.println("Do you want to see your recipe type (Y/N)?");
